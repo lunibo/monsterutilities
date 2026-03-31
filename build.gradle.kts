@@ -19,9 +19,9 @@ try {
 file("src/resources/version").writeText(version as String)
 
 plugins {
-	kotlin("jvm") version "1.3.71"
+	kotlin("jvm") version "1.6.21"
 	application
-	id("com.github.johnrengelman.shadow") version "5.1.0"
+	id("com.github.johnrengelman.shadow") version "7.1.2"
 	id("com.github.breadmoirai.github-release") version "2.2.9"
 	id("com.github.ben-manes.versions") version "0.21.0"
 	id("se.patrikerdes.use-latest-versions") version "0.2.13"
@@ -41,7 +41,7 @@ sourceSets {
 
 application {
 	applicationDefaultJvmArgs = listOf("-XX:+UseG1GC")
-	mainClassName = "xerus.monstercat.MainKt"
+	mainClass.set("xerus.monstercat.MainKt")
 }
 
 repositories {

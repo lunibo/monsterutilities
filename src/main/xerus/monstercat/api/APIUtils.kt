@@ -30,7 +30,7 @@ object APIUtils {
 		val titleSplit = "$artists $title".splitTitleTrimmed()
 		val loggingThreshold = titleSplit.size / 2
 		val tracks = Cache.getAllTracks()
-		var bestTrack = tracks.maxBy { track ->
+		var bestTrack = tracks.maxByOrNull { track ->
 			val splitTitleTrimmed = track.init().splitTitle
 			titleSplit.sumBy { splitTitleTrimmed.contains(it).toInt() }
 				.also {
@@ -39,16 +39,16 @@ object APIUtils {
 				}
 		}
 		bestTrack = tracks.filter { it.id == bestTrack?.id }
-				.minBy { xerus.monstercat.Settings.PLAYERARTPRIORITY.get().priorities.map { it.displayName }.indexOf(it.release.type)}
+				.minByOrNull { xerus.monstercat.Settings.PLAYERARTPRIORITY.get().priorities.map { it.displayName }.indexOf(it.release.type)}
 		
 		return bestTrack
 	}
 	
-	suspend fun findRelease(title: String, artist: String) = Cache.getReleases().maxBy { release ->
+	suspend fun findRelease(title: String, artist: String) = Cache.getReleases().maxByOrNull { release ->
 		title.sumBy { release.title.contains(it).toInt() } + title.sumBy { release.artistsTitle.contains(it).toInt() }
 	}
 	
-	suspend fun findRelease(catalogId: String) = Cache.getReleases().maxBy { release ->
+	suspend fun findRelease(catalogId: String) = Cache.getReleases().maxByOrNull { release ->
 		catalogId.sumBy { release.catalogId.contains(it).toInt() }
 	}
 	

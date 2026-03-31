@@ -47,11 +47,21 @@ fun main(args: Array<String>) {
 	logger.debug("Commandline arguments: ${args.joinToString(", ", "[", "]")}")
 	logger.debug("Running from $codeSource")
 	
-	if(!SystemUtils.javaVersion.startsWith("1.8")) {
-		SimpleFrame { add(JTextArea("Please install and use Java 8!\nThe current version is ${SystemUtils.javaVersion}").apply { isEditable = false }) }
+	val javaVersionStr = SystemUtils.javaVersion
+	// Parse major version: Java 8 reports "1.8.x", Java 9+ reports "9.x", "11.x", etc.
+	val majorVersion = javaVersionStr.split(".").let { parts ->
+		if (parts[0] == "1") parts.getOrNull(1)?.toIntOrNull()
+		else parts[0].toIntOrNull()
+	}
+	if (majorVersion == null) {
+		SimpleFrame { add(JTextArea("Could not determine Java version: $javaVersionStr\nPlease install Java 11 or newer.").apply { isEditable = false }) }
 		return
 	}
-	logger.info("Version: $currentVersion, Java version: ${SystemUtils.javaVersion}")
+	if (majorVersion < 11) {
+		SimpleFrame { add(JTextArea("Please install Java 11 or newer!\nThe current version is $javaVersionStr").apply { isEditable = false }) }
+		return
+	}
+	logger.info("Version: $currentVersion, Java version: $javaVersionStr")
 	
 	logger.info("Initializing Google Sheets API Service")
 	Sheets.initService("MonsterUtilities")

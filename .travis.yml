@@ -1,12 +1,10 @@
 os: linux
-dist: trusty
+dist: focal
 language: java
+jdk:
+  - openjdk11
 git:
   depth: 3
-addons:
-  apt:
-    packages:
-      - oracle-java8-installer
 
 env:
   - TERM=dumb

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="8.0" transformSequenceNumber="8">
   <directoryPresets config="../MonsterUtilities-${compiler:sys.version}.jar" />
-  <application name="MonsterUtilities" applicationId="6836-5354-4913-5566" mediaDir="." mediaFilePattern="${compiler:sys.fullName}_${compiler:sys.platform}_${compiler:sys.version}" pack200Compression="true" shortName="MonsterUtilities" publisher="Xerus2000" version="dev" macVolumeId="92204b6f65bce8d0" javaMinVersion="1.8" javaMaxVersion="1.8">
+  <application name="MonsterUtilities" applicationId="6836-5354-4913-5566" mediaDir="." mediaFilePattern="${compiler:sys.fullName}_${compiler:sys.platform}_${compiler:sys.version}" pack200Compression="true" shortName="MonsterUtilities" publisher="Xerus2000" version="dev" macVolumeId="92204b6f65bce8d0" javaMinVersion="11">
     <jreBundles jdkProviderId="JBR" />
   </application>
   <files>

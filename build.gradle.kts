@@ -45,15 +45,25 @@ application {
 }
 
 repositories {
-	jcenter()
+	mavenCentral()
 	maven("https://jitpack.io")
 }
+
+val javafxVersion = "17.0.9"
 
 dependencies {
 	implementation(kotlin("reflect"))
 	
 	implementation("com.github.Xerus2000.util", "javafx", "2f67fc2")
-	implementation("org.controlsfx", "controlsfx", "8.40.+")
+	implementation("org.controlsfx", "controlsfx", "11.2.0")
+	
+	// Bundle OpenJFX for all platforms so the fat JAR runs without a JDK-bundled JavaFX
+	for (platform in listOf("win", "linux", "mac")) {
+		implementation("org.openjfx:javafx-base:$javafxVersion:$platform")
+		implementation("org.openjfx:javafx-controls:$javafxVersion:$platform")
+		implementation("org.openjfx:javafx-graphics:$javafxVersion:$platform")
+		implementation("org.openjfx:javafx-media:$javafxVersion:$platform")
+	}
 	
 	implementation("ch.qos.logback", "logback-classic", "1.2.+")
 	implementation("io.github.microutils", "kotlin-logging", "1.6.+")
@@ -62,7 +72,7 @@ dependencies {
 	implementation("org.apache.httpcomponents", "httpmime", "4.5.+")
 	implementation("com.google.apis", "google-api-services-sheets", "v4-rev20190508-1.30.1")
 	
-	implementation("com.beust", "klaxon", "5.2")
+	implementation("com.beust", "klaxon", "5.6")
 	
 	val junitVersion = "5.5.0"
 	testImplementation("org.junit.jupiter", "junit-jupiter-api", junitVersion)
@@ -103,6 +113,9 @@ tasks {
 		group = MAIN
 		archiveClassifier.set("")
 		destinationDirectory.set(file("."))
+		// Exclude module-info classes to avoid conflicts when merging modular JARs (e.g. OpenJFX)
+		exclude("module-info.class")
+		mergeServiceFiles()
 		doFirst {
 			destinationDirectory.get().asFile.listFiles()!!.forEach {
 				if(it.name.endsWith("jar"))
@@ -161,7 +174,7 @@ tasks {
 	}
 	
 	withType<KotlinCompile> {
-		kotlinOptions.jvmTarget = "1.8"
+		kotlinOptions.jvmTarget = "11"
 	}
 	
 	test {
@@ -174,9 +187,9 @@ println("Java version: ${System.getProperty("java.version")}")
 println("Version: $version")
 val compileKotlin: KotlinCompile by tasks
 compileKotlin.kotlinOptions {
-	jvmTarget = "1.8"
+	jvmTarget = "11"
 }
 val compileTestKotlin: KotlinCompile by tasks
 compileTestKotlin.kotlinOptions {
-	jvmTarget = "1.8"
+	jvmTarget = "11"
 }
